@@ -1,0 +1,133 @@
+## Estrategias de Cobertura con futuros y opciones en Python
+
+#opciones  para cobertura (productor): 
+# Comprar Put ,
+#  Pactar Foward + Compra de Call,
+#  Venta Futuro +compra de call
+
+
+from ast import If
+
+
+def bienv ():
+    mensaje = "Bienvenido a nuestra Calculadora para Coberturistas" 
+
+
+    return  mensaje
+
+    print(bienv)
+
+
+print("Vamos a pedirte unos datos para poder mostrarte los diferentes escenarios para cada opción")
+primaCP= float(input("Ingrese el costo de la prima por comprar el put  "))  
+strikeput= int(input("Ingrese el precio de ejercicio del put  "))  
+primaCC= float(input("Ingrese el costo de la prima por comprar el call  "))  
+strikecall= int(input("Ingrese el precio de ejercicio del call  "))  
+FWDprecio= int(input("Ingrese el precio pactado en el FWD  "))   
+Ventafuturo= int(input("Ingrese el precio de la venta del futuro  "))  
+
+
+
+##PISOS Y ESTRATEGIAS
+
+print("Veamos que estrategias podemos armar y en principio cuales son los pisos de precio en cada una")
+
+print("ESTRATEGIA 1 : Compra de put, ESTRATEGIA 2: Foward y compra de call, ESTRATEGIA 3 : venta a futuro, compra de call") 
+
+print("El valor piso para las estrategias es: ")
+PISOESTRATEGIA1 = strikeput - primaCP 
+PISOESTRATEGIA2 = FWDprecio - primaCC 
+PISOESTRATEGIA3 = Ventafuturo - primaCC 
+
+print( f" ESTRATEGIA 1:  {strikeput - primaCP }  ")
+print( f" ESTRATEGIA 2:  { FWDprecio - primaCC } "  )
+print( f" ESTRATEGIA 3: { Ventafuturo - primaCC } " )
+
+print(" Ahora veamos que pasa en los diferentes escenarios de precios")
+
+precio= ( strikeput + strikecall + Ventafuturo + FWDprecio) /4  ##Aqui saque un promedio de los valores para en base a eso poder mostrar diferentes escenarios
+
+i= 0.6
+precio= precio * i
+for n in range(0,10):
+    
+    preciospot= int(precio * i)
+    i = i + 0.2
+
+   
+
+    print(f" En un escenario que el spot este : {preciospot}")
+
+    if preciospot <= strikeput :
+     print(f" El precio de venta  en la estrategia 1 (compra de put) sera: {PISOESTRATEGIA1} " )
+    else:
+        TECHOESTRATEGIA1= preciospot - primaCP
+        print(f" Se deja de Ejercer el put , el precio de venta  en la estrategia 1 sera: { TECHOESTRATEGIA1 } " )
+        
+        print("")
+    
+
+
+    if preciospot  < strikecall :
+     print(f" El precio de venta  en la estrategia 2 (FWD + Compra call ) sera: {PISOESTRATEGIA2} " )
+    else:
+        TECHOESTRATEGIA2 = (- strikecall + preciospot - primaCC + FWDprecio)
+        print(f" Se Ejerce el call , el precio de venta  en la estrategia 2 (FWD + Compra call ) sera: {TECHOESTRATEGIA2} " )
+
+    print("")
+  
+
+    if preciospot  < strikecall :
+    
+        print(f" NO Se Ejerce el call , el precio de venta  en la estrategia 3  sera  (Venta futuro + Compra call): { (Ventafuturo-preciospot - primaCC + preciospot)} " )
+    else:
+        TECHOESTRATEGIA3= (Ventafuturo- preciospot - primaCC + preciospot - strikecall + preciospot) 
+        print(f" el precio de venta  en la estrategia 3  sera  (Venta futuro + Compra call): {TECHOESTRATEGIA3}   ")
+
+print("")
+print("##############################################################")
+aux1=0
+
+
+aux2=0
+if PISOESTRATEGIA1 > PISOESTRATEGIA2:
+    aux1= PISOESTRATEGIA1
+    pisomasalto= "ESTRATEGIA 1"
+    pisonumerico= PISOESTRATEGIA1
+else:
+    aux1= PISOESTRATEGIA2
+    pisomasalto= "ESTRATEGIA 2"
+    pisonumerico= PISOESTRATEGIA2
+if aux1 < PISOESTRATEGIA3 :
+    pisomasalto= "ESTRATEGIA 3"
+    pisonumerico= PISOESTRATEGIA3
+
+if TECHOESTRATEGIA1 > TECHOESTRATEGIA2:
+    aux2= TECHOESTRATEGIA1
+    techomasalto= "ESTRATEGIA 1"
+    techonumerico=TECHOESTRATEGIA1
+else:
+    aux2= TECHOESTRATEGIA2
+    techomasalto= "ESTRATEGIA 2"
+    techonumerico= TECHOESTRATEGIA2
+if aux2 < TECHOESTRATEGIA3 :
+    techomasalto= "ESTRATEGIA 3"
+    techonumerico= TECHOESTRATEGIA3
+
+
+
+print("")
+print("###################################")    
+
+print(f"La estrategia que me da el mayor  piso antes un escenario bajista es {pisomasalto} , a un valor de {pisonumerico} ")
+print(f" La estrategia que me da un techo mas alto antes un escenario alcista es: {techomasalto}, a un valor de  {techonumerico} ")
+    
+    
+
+
+
+
+
+
+
+
